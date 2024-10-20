@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.WebElementCondition;
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 
@@ -22,17 +23,20 @@ public interface CommonMethods<T> {
         }
     }
 
+    @Step("Проверяем наличие текста '{expText}'")
     default T textIsPresent(String expText){
         boolean act = shouldBe(androidUIAutomator("new UiSelector().text(\"%s\")".formatted(expText)), Condition.exist);
         Assertions.assertTrue(act, "expected text: '%s'".formatted(expText));
         return (T) this;
     }
 
+    @Step("Проверка присутствия и кликабельности '{buttonName}'")
     default void checkClickable(By by, String buttonName) {
         boolean act = shouldBe(by, exist, clickable);
         assertTrue(act, "'%s' button is exist, clickable".formatted(buttonName));
     }
 
+    @Step("Проверяем наличие текста '{expText}'")
     default void checkText(By by, String expText) {
         boolean act = shouldBe(by, exist);
         assertTrue(act, "locator present: %s".formatted(by.toString()));

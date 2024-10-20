@@ -5,6 +5,7 @@ import static io.appium.java_client.AppiumBy.androidUIAutomator;
 
 import com.codeborne.selenide.appium.SelenideAppiumElement;
 import com.google.inject.Singleton;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 
 @Singleton
@@ -17,25 +18,28 @@ public class PresentationCarousel implements CommonMethods<PresentationCarousel>
     private final SelenideAppiumElement skipButton = $(skipButtonSelector);
 
     public PresentationCarousel nextButtonIsPresent() {
-        checkClickable(nextButtonSelector, "next");
+        checkClickable(nextButtonSelector, "Next");
         return this;
     }
 
+    @Step("Клик по кнопке 'Next'")
     public PresentationCarousel nextButtonClick(){
         nextButton.click();
         return this;
     }
 
     public PresentationCarousel skipButtonIsPresent() {
-        checkClickable(skipButtonSelector, "skip");
+        checkClickable(skipButtonSelector, "Skip");
         return this;
     }
 
+    @Step("Клик по кнопке 'Skip'")
     public PresentationCarousel skipButtonClick(){
         skipButton.click();
         return this;
     }
 
+    @Step("Просвайпать презентационную карусель до 'Skip' и кликнуть")
     public PresentationCarousel scrollToSkipAndClick(){
         skipButton.swipeTo();
         skipButton.click();

@@ -6,6 +6,7 @@ import static io.appium.java_client.AppiumBy.androidUIAutomator;
 import com.codeborne.selenide.appium.SelenideAppiumElement;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import ru.otus.java.qa.pro.mobile.pages.components.Alert;
 
@@ -34,16 +35,18 @@ public class ChatPage implements CommonMethods<ChatPage> {
         return this;
     }
 
+    @Step("Ввод текста 'text'")
     public ChatPage inputSend(String text) {
         input.sendKeys(text);
         return this;
     }
 
     public ChatPage sendButtonIsPresent() {
-        checkClickable(sendButtonSelector, "Type a message...");
+        checkClickable(sendButtonSelector, "Send");
         return this;
     }
 
+    @Step("Клик по 'Send'")
     public ChatPage sendButtonClick() {
         sendButton.click();
         return this;

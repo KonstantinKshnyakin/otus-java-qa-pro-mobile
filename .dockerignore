@@ -1,0 +1,7 @@
+target/
+.idea
+.allure
+Dockerfile
+Jenkinsfile
+README.md
+.gitignore

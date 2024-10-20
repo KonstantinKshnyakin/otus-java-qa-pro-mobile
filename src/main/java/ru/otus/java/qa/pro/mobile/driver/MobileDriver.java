@@ -14,6 +14,8 @@ import java.util.function.Consumer;
 
 public class MobileDriver implements WebDriverProvider {
 
+    private Boolean isRemote = Boolean.parseBoolean(System.getProperty("isRemote", "false").toLowerCase());
+
     @Nonnull
     @Override
     public WebDriver createDriver(@Nonnull Capabilities capabilities) {
@@ -26,10 +28,12 @@ public class MobileDriver implements WebDriverProvider {
         setOption("deviceName", options::setDeviceName);
         setOption("udid", options::setUdid);
 
-        String appiumUrl = System.getProperty("appiumUrl", "http://127.0.0.1:4723");
+        String appiumUrl = getRequiredProperty("appiumUrl", "http://localhost:4723");
 
-        String appPath = URLDecoder.decode(getClass().getResource("/Andy.apk").getPath(), UTF_8).substring(1);
+        String localAppPath = URLDecoder.decode(getClass().getResource("/Andy.apk").getPath(), UTF_8).substring(1);
+        String appPath = getRequiredProperty("apkPath", localAppPath);
         options.setApp(appPath);
+
         AppiumDriver driver;
         try {
             driver = new AndroidDriver(new URI(appiumUrl).toURL(), options);
@@ -39,11 +43,25 @@ public class MobileDriver implements WebDriverProvider {
         return driver;
     }
 
+    private String getRequiredProperty(String key, String defVal) {
+        String appPath = System.getProperty(key);
+        if (isaPresent(appPath)) {
+            return appPath;
+        } else if (!isRemote) {
+            return defVal;
+        }
+        throw new IllegalArgumentException("Not specified %s".formatted(key));
+    }
+
     private void setOption(String propertyKey, Consumer<String> consumer) {
         String propertyValue = System.getProperty(propertyKey);
-        if (propertyValue != null && !propertyValue.isBlank()) {
+        if (isaPresent(propertyValue)) {
             consumer.accept(propertyValue);
         }
+    }
+
+    private boolean isaPresent(String propertyValue) {
+        return propertyValue != null && !propertyValue.isBlank();
     }
 
 }
